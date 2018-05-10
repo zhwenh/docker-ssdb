@@ -2,7 +2,7 @@ FROM ubuntu:16.04
 MAINTAINER cd <cleardevice@gmail.com>
 
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    apt-get install -y nano git make g++ autoconf && \
+    apt-get install -y nano git make g++ autoconf python2.7 && \
 \
     git clone https://github.com/ideawu/ssdb.git /tmp/ssdb --depth 1 && \
     cd /tmp/ssdb && make && make install && \
@@ -21,8 +21,10 @@ RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
       -e 's@level:.*@level: info@' \
       -e 's@output:.*@output: stdout@' \
       -e 's@ip:.*@ip: 0.0.0.0@' \
-      -i /ssdb/conf/ssdb.conf
-
+      -i /ssdb/conf/ssdb.conf && \
+  sed -i -e "s/#auth: very-strong-password/auth: RR3ehDTjsdi7QYRoRR3ehDTjsdi7QYRoRR3ehDTj/g" /etc/ssdb.conf
+RUN update-alternatives --install /usr/bin/python python /usr/bin/python2.7 100
+ENV TZ Asia/Shanghai
 WORKDIR /ssdb
 VOLUME /ssdb/data
 
